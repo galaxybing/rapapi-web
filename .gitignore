@@ -1,0 +1,15 @@
+.nyc_output
+/dist
+/build
+/bin
+.DS_Store
+/src/config
+node_modules
+bower_components
+coverage
+npm-debug.log
+tmp
+package-lock.json
+dump.rdb
+/docker/mysql/volume
+*-galaxyw.md
