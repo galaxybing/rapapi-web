@@ -36,7 +36,7 @@ class LoginForm extends Component {
     this.props.onLogin({
       email: 'guest@317hu.com',
       password: 'guest@66D',
-      captcha: 'guest_captcha'
+      captcha: ''
     }, () => {
       // let { pathname } = history.location
       // if (pathname !== '/account/login') history.push(pathname) // 如果用户在其他业务页面，则不跳转
