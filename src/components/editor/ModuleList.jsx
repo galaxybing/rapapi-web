@@ -32,7 +32,8 @@ class Module extends Component {
             ? <span className='fake-link' onClick={e => this.setState({ update: true })}><GoPencil /></span>
             : null
           }
-          {repository.owner.id === auth.id || repository.members.find(itme => itme.id === auth.id)
+          {/* 移除掉 加入者的删除模块功能 */}
+          {repository.owner.id === auth.id // || repository.members.find(itme => itme.id === auth.id)
             ? <span className='fake-link' onClick={e => this.handleDelete(e, mod)}><GoTrashcan /></span>
             : null
           }
@@ -91,7 +92,7 @@ class ModuleList extends Component {
             </li>
           )}
           {/* 编辑权限：拥有者或者成员 */}
-          {isOwned || isJoined
+          {isOwned // || isJoined // 移除掉 加入者的新增模块功能
             ? <li>
               <span className='fake-link' onClick={e => this.setState({ create: true })}>
                 <GoPackage className='fontsize-14' /> 新建模块

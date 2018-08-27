@@ -10,14 +10,14 @@ import './LoginForm.css'
 const mockUser = process.env.NODE_ENV === 'development'
   ? () => Mock.mock({
     email: 'admin@rap2.com',
-    password: 'admin'
+    password: 'guest@66D'
   })
   : () => ({
     email: '',
     password: ''
   })
 
-mockUser.captchaId = Date.now()
+// mockUser.captchaId = Date.now()
 
 // 展示组件
 class LoginForm extends Component {
@@ -66,11 +66,12 @@ class LoginForm extends Component {
               <label>密码：</label>
               <input value={this.state.password} type='password' onChange={e => this.setState({ password: e.target.value })} className='form-control' placeholder='Password' required />
             </div>
-            <div className='form-group'>
+            {/* 
+              <div className='form-group'>
               <label>验证码：</label>
               <input onChange={e => this.setState({ captcha: e.target.value })} className='form-control' placeholder='验证码' required />
               <img src={`${serve}/captcha?t=${this.state.captchaId || ''}`} onClick={e => this.setState({ captchaId: Date.now() })} alt='captcha' />
-            </div>
+            </div> */}
           </div>
           <div className='footer' style={{textAlign: 'center'}}>
             <button type='submit' className='btn btn-primary w140'>提交</button>
