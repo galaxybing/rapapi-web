@@ -42,7 +42,7 @@ class DropdownMenu extends Component {
           nextModule.interfaces.push(nextInterface)
         }
 
-        itf.properties.forEach(property => {
+        itf.properties && itf.properties.forEach(property => {
           let nextProperty = { ...property }
           let matchProperty = nextProperty.name.indexOf(seed) !== -1
           if (matchProperty) {
@@ -151,10 +151,10 @@ class RepositorySearcher extends Component {
     let { repository, className, type } = this.props
     return (
       <div className={`RepositorySearcher dropdown ${className}`}>
-        <input value={this.state.seed} onChange={e => { this.setState({ seed: e.target.value }) }} className='dropdown-input form-control' placeholder='工作区搜索' />
-        {this.state.seed && <DropdownMenu repository={repository} type={type} seed={this.state.seed} onSelect={(url) => {
+        <input value={this.state.seed} onChange={e => { this.setState({ seed: e.target.value, interfaceLinked: false }) }} className='dropdown-input form-control' placeholder='工作区搜索' />
+        {(this.state.seed && !this.state.interfaceLinked) && <DropdownMenu repository={repository} type={type} seed={this.state.seed} onSelect={(url) => {
           if (type === 'LinkInterface') { // 定义联接接口操作
-            this.setState({ seed: url }, () => {
+            this.setState({ seed: url, interfaceLinked: true }, () => {
               this.props.onResolve && this.props.onResolve(url)
             })
           } else {

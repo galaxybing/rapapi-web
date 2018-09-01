@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { PropTypes, connect, Link, replace, StoreStateRouterLocationURI } from '../../family'
 import { RModal, RSortable } from '../utils'
 import InterfaceForm from './InterfaceForm'
-import LinkInterfaceForm  from './LinkInterfaceForm'
+import InterfaceLinkForm  from './InterfaceLinkForm'
 import { GoPencil, GoTrashcan, /* GoRocket, */ GoLock } from 'react-icons/lib/go'
 import { TiPlug, TiPlusOutline } from 'react-icons/lib/ti'
 
@@ -26,6 +26,11 @@ class Interface extends Component {
     let { store } = this.context
     let { auth, repository, mod, itf } = this.props
     let selectHref = StoreStateRouterLocationURI(store).setSearch('itf', itf.id).href()
+    let isInterfaceLinked = false;
+    /* 处理 联接接口 路径 */
+    if (itf.url && itf.url.indexOf('/repository/editor?') === 0) { // 联接前缀地址，处于第一位索引；表示为联接接口链接
+      isInterfaceLinked = true;
+    }
     let isOwned = repository.owner.id === auth.id
     let isJoined = repository.members.find(itme => itme.id === auth.id)
     return (
@@ -34,12 +39,12 @@ class Interface extends Component {
         {/* TODO 2.3 <a> 的范围应该扩大至整个 Interface，否则只有点击到 <a> 才能切换，现在不容易点击到 <a> */}
         <span className='name'>
           {itf.locker ? <span className='locked mr5'><GoLock /></span> : null}
-          <Link to={selectHref}><span>{itf.name}</span></Link>
+          <Link to={isInterfaceLinked ? itf.url : selectHref}><span style={isInterfaceLinked ? {color: '#28a745'}: {}}>{itf.name}</span></Link>
         </span>
         {isOwned || isJoined
           ? <div className='toolbar'>
             {/* DONE 2.2 X 支持双击修改 */}
-            {!itf.locker || itf.locker.id === auth.id
+            {!isInterfaceLinked && (!itf.locker || itf.locker.id === auth.id)
               ? <span className='fake-link' onClick={e => this.setState({ update: true })}><GoPencil /></span>
               : null
             }
@@ -120,7 +125,7 @@ class InterfaceList extends Component {
               <InterfaceForm title='新建接口' repository={repository} mod={mod} />
             </RModal>
             <RModal when={this.state.link} onClose={e => this.setState({ link: false })} onResolve={this.handleLinkInterface}>
-              <LinkInterfaceForm title='联接接口' mod={mod} repository={repository} />
+              <InterfaceLinkForm title='联接接口' mod={mod} repository={repository} />
             </RModal>
           </div>
           : null}
