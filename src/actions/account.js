@@ -1,3 +1,4 @@
+export const hideErrMessage = () => ({ type: 'HIDE_ERR_MESSAGE' })
 // 登陆
 export const login = (user, onResolved) => ({ type: 'USER_LOGIN', user, onResolved })
 export const loginSucceeded = (user) => ({ type: 'USER_LOGIN_SUCCEEDED', user })

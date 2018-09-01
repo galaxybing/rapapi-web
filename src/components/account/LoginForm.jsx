@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { PropTypes, connect } from '../../family'
-import { login } from '../../actions/account'
+import { login, hideErrMessage } from '../../actions/account'
 // import { Link } from 'react-router-dom'
 import { serve } from '../../config'
 import Mock from 'mockjs'
@@ -10,11 +10,13 @@ import './LoginForm.css'
 const mockUser = process.env.NODE_ENV === 'development'
   ? () => Mock.mock({
     email: 'admin@rap2.com',
-    password: 'guest@66D'
+    password: 'guest@66D',
+    errMessageVisible: false,
   })
   : () => ({
     email: '',
-    password: ''
+    password: '',
+    errMessageVisible: false,
   })
 
 // mockUser.captchaId = Date.now()
@@ -53,18 +55,18 @@ class LoginForm extends Component {
           <a style={{color: '#007bff', cursor: 'pointer'}} onClick={this.guestLoginHandler}>【游客身份】</a><br /><br />
           或
         </div>
-        <div className='header'>
-          <span className='title'>登录</span>
-        </div>
+        {/* <div className='header'>
+          <span className='title' style={{textAlign: 'center'}}>登录</span>
+        </div> */}
         <form onSubmit={this.handleSubmit}>
           <div className='body'>
             <div className='form-group'>
               <label>邮箱：</label>
-              <input value={this.state.email} onChange={e => this.setState({ email: e.target.value })} className='form-control' placeholder='Email' autoFocus='true' required />
+              <input value={this.state.email} onChange={e => this.setState({ email: e.target.value, errMessageVisible: false })} className='form-control' placeholder='Email' autoFocus='true' required />
             </div>
             <div className='form-group'>
               <label>密码：</label>
-              <input value={this.state.password} type='password' onChange={e => this.setState({ password: e.target.value })} className='form-control' placeholder='Password' required />
+              <input value={this.state.password} type='password' onChange={e => this.setState({ password: e.target.value, errMessageVisible: false })} className='form-control' placeholder='Password' required />
             </div>
             {/* 
               <div className='form-group'>
@@ -74,26 +76,35 @@ class LoginForm extends Component {
             </div> */}
           </div>
           <div className='footer' style={{textAlign: 'center'}}>
-            <button type='submit' className='btn btn-primary w140'>提交</button>
+            <button type='submit' className='btn btn-primary w140'>登录</button>
             {/* <Link to='/account/register'>注册</Link> */}
           </div>
           
-          {this.props.auth.message &&
-            <div className='alert alert-danger fade show' role='alert'>
-              {this.props.auth.message}
-            </div>
+          {
+            this.props.auth.message && this.state.errMessageVisible ? (
+              <div className='alert alert-danger fade show err-message' role='alert'>
+                {this.props.auth.message}
+              </div>
+            ) : ''
           }
         </form>
       </section>
     )
   }
   handleSubmit = (e) => {
-    let { history, onLogin } = this.props
+    let { history, onLogin, hideErrMessage } = this.props
     e.preventDefault()
+    hideErrMessage(); // 置空 错误信息
+    this.setState({
+      errMessageVisible: true
+    })
     onLogin(this.state, () => {
       let { pathname } = history.location
+      /*
       if (pathname !== '/account/login') history.push(pathname) // 如果用户在其他业务页面，则不跳转
       else history.push('/') // 跳转到用户面板
+      */
+      history.push('/'); // 修复 直接跳转用户面板，防止首次登录 404
     })
   }
 }
@@ -103,7 +114,8 @@ const mapStateToProps = (state) => ({
   auth: state.auth
 })
 const mapDispatchToProps = ({
-  onLogin: login
+  onLogin: login,
+  hideErrMessage,
 })
 export default connect(
   mapStateToProps,

@@ -34,6 +34,7 @@ class RepositoryEditor extends Component {
     onClearRepository: PropTypes.func.isRequired
   }
   static childContextTypes = {
+    author: PropTypes.string.isRequired,
     onAddRepository: PropTypes.func.isRequired,
     onUpdateRepository: PropTypes.func.isRequired,
     onAddModule: PropTypes.func.isRequired,
@@ -126,7 +127,7 @@ class RepositoryEditor extends Component {
             )
           }
           
-          <RepositorySearcher repository={repository} />
+          <RepositorySearcher repository={repository} className={'ToobarSearch'} />
           {
             isGuester ? null : <div className='desc'>{repository.description}</div>
           }
@@ -155,6 +156,7 @@ class RepositoryEditor extends Component {
 
 // 容器组件
 const mapStateToProps = (state) => ({
+  author: 'galaxyw',
   auth: state.auth,
   repository: state.repository
 })

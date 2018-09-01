@@ -2,7 +2,9 @@ import React, { Component } from 'react'
 import { PropTypes, connect, Link, replace, StoreStateRouterLocationURI } from '../../family'
 import { RModal, RSortable } from '../utils'
 import InterfaceForm from './InterfaceForm'
-import { GoPencil, GoTrashcan, GoRocket, GoLock } from 'react-icons/lib/go'
+import LinkInterfaceForm  from './LinkInterfaceForm'
+import { GoPencil, GoTrashcan, /* GoRocket, */ GoLock } from 'react-icons/lib/go'
+import { TiPlug, TiPlusOutline } from 'react-icons/lib/ti'
 
 class Interface extends Component {
   static contextTypes = {
@@ -85,7 +87,7 @@ class InterfaceList extends Component {
   }
   constructor (props) {
     super(props)
-    this.state = { create: false }
+    this.state = { create: false, link: false }
   }
   render () {
     let { auth, repository, mod, itfs = [], itf } = this.props
@@ -108,10 +110,17 @@ class InterfaceList extends Component {
             {/* DONE 2.2 反复 setState() 还是很繁琐，需要提取一个类似 DialogController 的组件 */}
             {/* DONE 2.2 如何重构为高阶组件 */}
             <span className='fake-link' onClick={e => this.setState({ create: true })}>
-              <span className='fontsize-14'><GoRocket /></span> 新建接口
+              <span className='fontsize-14'><TiPlusOutline /></span> 新建接口
+            </span>
+            <br />
+            <span className='fake-link' onClick={e => this.setState({ link: true })}>
+              <span className='fontsize-14'><TiPlug /></span> 联接接口
             </span>
             <RModal when={this.state.create} onClose={e => this.setState({ create: false })} onResolve={this.handleCreate}>
               <InterfaceForm title='新建接口' repository={repository} mod={mod} />
+            </RModal>
+            <RModal when={this.state.link} onClose={e => this.setState({ link: false })} onResolve={this.handleLinkInterface}>
+              <LinkInterfaceForm title='联接接口' mod={mod} repository={repository} />
             </RModal>
           </div>
           : null}
@@ -119,6 +128,9 @@ class InterfaceList extends Component {
     )
   }
   handleCreate = (e) => {
+  }
+  handleLinkInterface = () => {
+    //
   }
   handleSort = (e, sortable) => {
     let { onSortInterfaceList } = this.context

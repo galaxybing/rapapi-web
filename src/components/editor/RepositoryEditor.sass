@@ -20,11 +20,14 @@
   > .body
     // padding: 0 2rem;
 
-.RepositorySearcher.dropdown
+.RepositorySearcher.ToobarSearch.dropdown
   position: absolute;
   top: 2rem;
   right: 2rem;
   left: auto;
+  
+.RepositorySearcher.dropdown
+  position: relative;
   > .dropdown-input
     margin-bottom: 0;
     width: 20rem;
@@ -37,6 +40,7 @@
     max-height: 50rem;
     overflow: scroll;
     a.dropdown-item
+      white-space: normal;
       &.dropdown-item-module
         padding-left: 1.5rem;
         color: #333;

@@ -22,3 +22,5 @@
     top: -6rem;
     text-align: center;
     width: 100%; }
+  .LoginForm .err-message {
+    margin-bottom: 0; }

@@ -15,6 +15,8 @@ export default {
           return {}
         case AccountAction.loginFailed().type:
           return { message: action.message }
+        case AccountAction.hideErrMessage().type:
+          return { message: '' }
         default:
           return state
       }
@@ -92,6 +94,14 @@ export default {
         yield put(AccountAction.loginFailed(e.message))
       }
     },
+    // * [AccountAction.hideErrMessage().type] (action) {
+    //   try {
+    //     yield put(AccountAction.hideErrMessage()); // 置空 错误信息，以隐藏显示
+    //   } catch (e) {
+    //     console.error(e.message)
+    //     yield put(AccountAction.loginFailed(e.message))
+    //   }
+    // },
     * [AccountAction.logout().type] (action) {
       try {
         const user = yield call(AccountService.logout, action.user)

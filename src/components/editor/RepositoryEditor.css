@@ -15,11 +15,14 @@
     margin-top: .5rem;
     color: #666; }
 
-.RepositorySearcher.dropdown {
+.RepositorySearcher.ToobarSearch.dropdown {
   position: absolute;
   top: 2rem;
   right: 2rem;
   left: auto; }
+
+.RepositorySearcher.dropdown {
+  position: relative; }
   .RepositorySearcher.dropdown > .dropdown-input {
     margin-bottom: 0;
     width: 20rem; }
@@ -31,29 +34,31 @@
     min-width: 100%;
     max-height: 50rem;
     overflow: scroll; }
-    .RepositorySearcher.dropdown > .dropdown-menu a.dropdown-item.dropdown-item-module {
-      padding-left: 1.5rem;
-      color: #333; }
-    .RepositorySearcher.dropdown > .dropdown-menu a.dropdown-item.dropdown-item-interface {
-      padding-left: 4rem;
-      color: #333; }
-    .RepositorySearcher.dropdown > .dropdown-menu a.dropdown-item.dropdown-item-property {
-      padding-left: 6.5rem;
-      color: #666; }
-    .RepositorySearcher.dropdown > .dropdown-menu a.dropdown-item > .label {
-      margin-right: .5rem;
-      color: #666; }
-    .RepositorySearcher.dropdown > .dropdown-menu a.dropdown-item > .dropdown-item-clip {
-      margin-right: .5rem; }
-      .RepositorySearcher.dropdown > .dropdown-menu a.dropdown-item > .dropdown-item-clip .highlight {
-        font-weight: bold;
-        color: #4A7BF7; }
-    .RepositorySearcher.dropdown > .dropdown-menu a.dropdown-item:active {
-      color: #FFF; }
-      .RepositorySearcher.dropdown > .dropdown-menu a.dropdown-item:active > .label {
+    .RepositorySearcher.dropdown > .dropdown-menu a.dropdown-item {
+      white-space: normal; }
+      .RepositorySearcher.dropdown > .dropdown-menu a.dropdown-item.dropdown-item-module {
+        padding-left: 1.5rem;
+        color: #333; }
+      .RepositorySearcher.dropdown > .dropdown-menu a.dropdown-item.dropdown-item-interface {
+        padding-left: 4rem;
+        color: #333; }
+      .RepositorySearcher.dropdown > .dropdown-menu a.dropdown-item.dropdown-item-property {
+        padding-left: 6.5rem;
+        color: #666; }
+      .RepositorySearcher.dropdown > .dropdown-menu a.dropdown-item > .label {
+        margin-right: .5rem;
+        color: #666; }
+      .RepositorySearcher.dropdown > .dropdown-menu a.dropdown-item > .dropdown-item-clip {
+        margin-right: .5rem; }
+        .RepositorySearcher.dropdown > .dropdown-menu a.dropdown-item > .dropdown-item-clip .highlight {
+          font-weight: bold;
+          color: #4A7BF7; }
+      .RepositorySearcher.dropdown > .dropdown-menu a.dropdown-item:active {
         color: #FFF; }
-      .RepositorySearcher.dropdown > .dropdown-menu a.dropdown-item:active > .dropdown-item-clip .highlight {
-        color: #FFF; }
+        .RepositorySearcher.dropdown > .dropdown-menu a.dropdown-item:active > .label {
+          color: #FFF; }
+        .RepositorySearcher.dropdown > .dropdown-menu a.dropdown-item:active > .dropdown-item-clip .highlight {
+          color: #FFF; }
 
 .DuplicatedInterfacesWarning {
   margin-top: 1rem; }

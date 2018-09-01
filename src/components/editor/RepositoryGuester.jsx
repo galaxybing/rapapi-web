@@ -127,7 +127,7 @@ class RepositoryGuester extends Component {
             )
           }
           
-          <RepositorySearcher repository={repository} />
+          <RepositorySearcher repository={repository} className={'ToobarSearch'} />
           {
             isGuester ? null : <div className='desc'>{repository.description}</div>
           }

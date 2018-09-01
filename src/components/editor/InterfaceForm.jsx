@@ -27,6 +27,7 @@ const mockInterface = process.env.NODE_ENV === 'development'
 
 class InterfaceForm extends Component {
   static contextTypes = {
+    author: PropTypes.string.isRequired,
     rmodal: PropTypes.instanceOf(Component),
     onAddInterface: PropTypes.func.isRequired,
     onUpdateInterface: PropTypes.func.isRequired

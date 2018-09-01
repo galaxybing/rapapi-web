@@ -73,7 +73,7 @@ class DropdownMenu extends Component {
     store: PropTypes.object
   }
   render () {
-    let { repository, seed, onSelect } = this.props
+    let { repository, seed, onSelect, type } = this.props
     let uri = StoreStateRouterLocationURI(this.context.store).removeSearch('mod').removeSearch('itf')
     let { nextRespository, counter } = DropdownMenu.filter(repository, seed)
     if (counter === 0) return null
@@ -81,26 +81,58 @@ class DropdownMenu extends Component {
       <div className='dropdown-menu'>
         {nextRespository.modules.map((mod, index, modules) =>
           <div key={`mod-${mod.id}`}>
-            <Link to={URI(uri).setSearch({ mod: mod.id }).href()} onClick={onSelect} className='dropdown-item dropdown-item-module'>
-              <span className='label'>模块</span>
-              <Highlight className='dropdown-item-clip' clip={mod.name} seed={seed} />
-            </Link>
-            {mod.interfaces.map(itf =>
-              <div key={`itf-${itf.id}`} >
-                <Link to={URI(uri).setSearch({ mod: itf.moduleId }).setSearch({ itf: itf.id }).href()} onClick={onSelect} className='dropdown-item dropdown-item-interface'>
-                  <span className='label'>接口</span>
-                  <Highlight className='dropdown-item-clip' clip={itf.name} seed={seed} />
-                  <Highlight className='dropdown-item-clip' clip={itf.method} seed={seed} />
-                  <Highlight className='dropdown-item-clip' clip={itf.url} seed={seed} />
+            {
+              type === 'LinkInterface' ? (
+                <div className='dropdown-item dropdown-item-module'>
+                  <span className='label'>模块</span>
+                  <Highlight className='dropdown-item-clip' clip={mod.name} seed={seed} />
+                </div>
+              ): (
+                <Link to={URI(uri).setSearch({ mod: mod.id }).href()} onClick={onSelect} className='dropdown-item dropdown-item-module'>
+                  <span className='label'>模块</span>
+                  <Highlight className='dropdown-item-clip' clip={mod.name} seed={seed} />
                 </Link>
-                {itf.properties.map(property =>
-                  <Link key={`property-${property.id}`} to={URI(uri).setSearch({ mod: property.moduleId }).setSearch({ itf: property.interfaceId }).href()} onClick={onSelect} className='dropdown-item dropdown-item-property'>
-                    <span className='label'>属性</span>
-                    <Highlight className='dropdown-item-clip' clip={property.name} seed={seed} />
-                  </Link>
-                )}
-              </div>
-            )}
+              )
+            }
+            
+            {
+              type === 'LinkInterface' ? (
+                mod.interfaces.map(itf =>
+                  <div key={`itf-${itf.id}`} >
+                    <a onClick={() => onSelect(URI(uri).setSearch({ mod: itf.moduleId }).setSearch({ itf: itf.id }).href())} className='dropdown-item dropdown-item-interface' style={{ cursor: 'pointer' }}>
+                      <span className='label'>接口</span>
+                      <Highlight className='dropdown-item-clip' clip={itf.name} seed={seed} />
+                      <Highlight className='dropdown-item-clip' clip={itf.method} seed={seed} />
+                      <Highlight className='dropdown-item-clip' clip={itf.url} seed={seed} />
+                    </a>
+                    {itf.properties.map(property =>
+                      <div key={`property-${property.id}`} className='dropdown-item dropdown-item-property'>
+                        <span className='label'>属性</span>
+                        <Highlight className='dropdown-item-clip' clip={property.name} seed={seed} />
+                      </div>
+                    )}
+                  </div>
+                )
+              ) : (
+                mod.interfaces.map(itf =>
+                  <div key={`itf-${itf.id}`} >
+                    <Link to={URI(uri).setSearch({ mod: itf.moduleId }).setSearch({ itf: itf.id }).href()} onClick={onSelect} className='dropdown-item dropdown-item-interface'>
+                      <span className='label'>接口</span>
+                      <Highlight className='dropdown-item-clip' clip={itf.name} seed={seed} />
+                      <Highlight className='dropdown-item-clip' clip={itf.method} seed={seed} />
+                      <Highlight className='dropdown-item-clip' clip={itf.url} seed={seed} />
+                    </Link>
+                    {itf.properties.map(property =>
+                      <Link key={`property-${property.id}`} to={URI(uri).setSearch({ mod: property.moduleId }).setSearch({ itf: property.interfaceId }).href()} onClick={onSelect} className='dropdown-item dropdown-item-property'>
+                        <span className='label'>属性</span>
+                        <Highlight className='dropdown-item-clip' clip={property.name} seed={seed} />
+                      </Link>
+                    )}
+                  </div>
+                )
+              )
+              
+            }
             {index < modules.length - 1 && <div className='dropdown-divider' />}
           </div>
         )}
@@ -116,11 +148,19 @@ class RepositorySearcher extends Component {
     this.state = { seed: '' }
   }
   render () {
-    let { repository } = this.props
+    let { repository, className, type } = this.props
     return (
-      <div className='RepositorySearcher dropdown'>
+      <div className={`RepositorySearcher dropdown ${className}`}>
         <input value={this.state.seed} onChange={e => { this.setState({ seed: e.target.value }) }} className='dropdown-input form-control' placeholder='工作区搜索' />
-        {this.state.seed && <DropdownMenu repository={repository} seed={this.state.seed} onSelect={this.clearSeed} />}
+        {this.state.seed && <DropdownMenu repository={repository} type={type} seed={this.state.seed} onSelect={(url) => {
+          if (type === 'LinkInterface') { // 定义联接接口操作
+            this.setState({ seed: url }, () => {
+              this.props.onResolve && this.props.onResolve(url)
+            })
+          } else {
+            this.clearSeed()
+          }
+        }} />}
       </div>
     )
   }
