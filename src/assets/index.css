@@ -25,6 +25,13 @@
 .techfont {
   font-family: 'techfont'; }
 
+@font-face {
+  font-family: 'anticon';
+  font-display: fallback;
+  src: url("https://at.alicdn.com/t/font_148784_v4ggb6wrjmkotj4i.eot");
+  /* IE9*/
+  src: url("https://at.alicdn.com/t/font_148784_v4ggb6wrjmkotj4i.woff") format("woff"), url("https://at.alicdn.com/t/font_148784_v4ggb6wrjmkotj4i.ttf") format("truetype"), url("https://at.alicdn.com/t/font_148784_v4ggb6wrjmkotj4i.svg#iconfont") format("svg"); }
+
 .form-control {
   width: 100%;
   box-sizing: border-box;
@@ -1181,3 +1188,41 @@ pre {
   border-radius: 0.4rem;
   background-color: #F0F0F0;
   white-space: pre-wrap; }
+
+.icon-spin {
+  position: relative;
+  left: -5px;
+  -webkit-transition: margin-left 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+  transition: margin-left 0.3s cubic-bezier(0.645, 0.045, 0.355, 1); }
+
+.icon-spin:before {
+  display: inline-block;
+  -webkit-animation: loadingCircle 1s infinite linear;
+  animation: loadingCircle 1s infinite linear; }
+
+.icon-loading {
+  margin-left: -14px;
+  display: inline-block;
+  font-style: normal;
+  vertical-align: baseline;
+  text-align: center;
+  text-transform: none;
+  line-height: 1;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; }
+
+.icon-loading:before {
+  display: block;
+  content: "\E64D";
+  font-family: "anticon" !important; }
+
+@-webkit-keyframes loadingCircle {
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg); } }
+
+@keyframes loadingCircle {
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg); } }

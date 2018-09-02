@@ -49,6 +49,9 @@ class LoginForm extends Component {
     })
   }
   render () {
+    if (this.props.auth.message) {
+      this.state.loading = false;
+    }
     return (
       <section className='LoginForm'>
         <div className='guest-model'>
@@ -76,7 +79,10 @@ class LoginForm extends Component {
             </div> */}
           </div>
           <div className='footer' style={{textAlign: 'center'}}>
-            <button type='submit' className='btn btn-primary w140'>登录</button>
+            <button type='submit' className='btn btn-primary w140' disabled={this.state.loading ? true: false}>
+              <i className={this.state.loading ? `icon icon-spin icon-loading` : `icon icon-spin`}></i>
+              登录
+            </button>
             {/* <Link to='/account/register'>注册</Link> */}
           </div>
           
@@ -96,7 +102,8 @@ class LoginForm extends Component {
     e.preventDefault()
     hideErrMessage(); // 置空 错误信息
     this.setState({
-      errMessageVisible: true
+      errMessageVisible: true,
+      loading: true,
     })
     onLogin(this.state, () => {
       let { pathname } = history.location
