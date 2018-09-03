@@ -103,7 +103,7 @@ class InterfaceList extends Component {
       <article className='InterfaceList'>
         <RSortable onChange={this.handleSort} disabled={!isOwned && !isJoined}>
           <ul className='body'>
-            {itfs.map(item =>
+            {itfs.sort((a, b) => a.priority - b.priority).map(item =>
               <li key={item.id} className={item.id === itf.id ? 'active sortable' : 'sortable'} data-id={item.id}>
                 <Interface repository={repository} mod={mod} itf={item} active={item.id === itf.id} auth={auth} />
               </li>
