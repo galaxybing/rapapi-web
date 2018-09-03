@@ -86,7 +86,7 @@ class ModuleList extends Component {
     return (
       <RSortable onChange={this.handleSort} disabled={!isOwned && !isJoined}>
         <ul className='ModuleList clearfix'>
-          {mods.map((item, index) =>
+          {mods.sort((a, b) => a.priority - b.priority).map((item, index) =>
             <li key={item.id} className={item.id === mod.id ? 'active sortable' : 'sortable'} data-id={item.id}>
               <Module key={item.id} mod={item} active={item.id === mod.id} repository={repository} auth={auth} />
             </li>
