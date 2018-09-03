@@ -343,9 +343,11 @@
       &.payload.name
         @for $i from 0 through 42
           &.depth-#{$i}
-            padding-left: $i * 1rem + 0.75rem;
+            padding-left: $i * 1.5rem + 0.75rem;
       &.payload.value
         word-break: break-word;
+
+// 编辑状态的缩进
 .SortableTreeTable.editable
   .flex-row
     .td
@@ -354,7 +356,7 @@
       &.payload.name
         @for $i from 0 through 10
           &.depth-#{$i}
-            padding-left: $i * 1rem;
+            padding-left: $i * 1.2rem;
   input.editable, 
   select.editable, 
   textarea.editable
