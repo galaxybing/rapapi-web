@@ -13,6 +13,7 @@ const mockProperty = process.env.NODE_ENV === 'development'
     'scope|1': ['request', 'response'],
     name: '@WORD(6)',
     'type|1': TYPES,
+    requiredType: 0,
     'value|1': ['@INT', '@FLOAT', '@TITLE', '@NAME'],
     description: '@CSENTENCE',
     parentId: -1,
@@ -24,6 +25,7 @@ const mockProperty = process.env.NODE_ENV === 'development'
     scope: 'response',
     name: '',
     type: 'String',
+    requiredType: 0,
     value: '',
     description: '',
     parentId: -1,
@@ -70,6 +72,15 @@ class PropertyForm extends Component {
                   {TYPES.map(type =>
                     <option key={type} value={type}>{type}</option>
                   )}
+                </select>
+              </div>
+            </div>
+            <div className='form-group row'>
+              <label className='col-sm-2 control-label'>是否必选：</label>
+              <div className='col-sm-10'>
+                <select name='type' value={this.state.requiredType} onChange={e => this.setState({ requiredType: parseInt(e.target.value, 10) })} className='form-control'>
+                  <option key={'0'} value={0}>非必选</option>
+                  <option key={'1'} value={1}>必选</option>
                 </select>
               </div>
             </div>

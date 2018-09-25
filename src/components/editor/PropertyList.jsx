@@ -33,6 +33,7 @@ class SortableTreeTableHeader extends Component {
           {editable && <div className='th operations' />}
           <div className='th name'>名称</div>
           <div className='th type'>类型</div>
+          <div className='th type'>是否必选</div>
           {/* TODO 2.3 规则编辑器 */}
           <div className='th rule'>
             生成规则
@@ -47,9 +48,14 @@ class SortableTreeTableHeader extends Component {
 }
 
 const PropertyLabel = (props) => {
-  const { pos } = props
+  const { pos } = props;
+  
+  if (pos === 'required') {
+    return <label className='ml5 badge badge-danger'>Required</label>
+  }
+  
   if (pos === 1) {
-    return <label className='ml5 badge badge-danger'>HEAD</label>
+    return <label className='ml5 badge badge-info'>HEAD</label>
   } else if (pos === 3) {
     return <label className='ml5 badge badge-primary'>BODY</label>
   } else {
@@ -64,55 +70,81 @@ class SortableTreeTableRow extends Component {
     return (
       <RSortable group={property.depth} handle='.SortableTreeTableRow' disabled={!editable} onChange={handleSortProperties}>
         <div className={`RSortableWrapper depth${property.depth}`}>
-          {property.children.sort((a, b) => a.priority - b.priority).map(item =>
-            <div key={item.id} className='SortableTreeTableRow' data-id={item.id}>
-              <div className='flex-row'>
-                {editable &&
-                  <div className='td operations nowrap'>
-                    {(item.type === 'Object' || item.type === 'Array')
-                      ? <Link to='' onClick={e => { e.preventDefault(); handleClickCreateChildPropertyButton(item) }}><GoPlus className='fontsize-14 color-6' /></Link>
-                      : null}
-                    <Link to='' onClick={e => handleDeleteMemoryProperty(e, item)}><GoTrashcan className='fontsize-14 color-6' /></Link>
+          {property.children.sort((a, b) => a.priority - b.priority).map(item => {
+            const requiredType = item.requiredType ? parseInt(item.requiredType, 10) : 0;
+            return (
+              <div key={item.id} className='SortableTreeTableRow' data-id={item.id}>
+                <div className='flex-row'>
+                  {editable &&
+                    <div className='td operations nowrap'>
+                      {(item.type === 'Object' || item.type === 'Array')
+                        ? <Link to='' onClick={e => { e.preventDefault(); handleClickCreateChildPropertyButton(item) }}><GoPlus className='fontsize-14 color-6' /></Link>
+                        : null}
+                      <Link to='' onClick={e => handleDeleteMemoryProperty(e, item)}><GoTrashcan className='fontsize-14 color-6' /></Link>
+                    </div>
+                  }
+                  <div className={`td payload name depth-${item.depth} nowrap`}>
+                    {!editable
+                      ? (
+                        <span className='nowrap'>
+                          {item.name}
+                          {item.scope === 'request' && item.depth === 0 ? <PropertyLabel pos={item.pos} /> : null}
+                          {
+                            requiredType === 1 ? <PropertyLabel pos={'required'} /> : null
+                          }
+                        </span>
+                      ) : (
+                        <span className='nowrap'>
+                          <input value={item.name} onChange={e => handleChangePropertyField(item.id, 'name', e.target.value)} className='form-control editable' spellCheck='false' placeholder='' />
+                          {
+                            requiredType === 1 ? <PropertyLabel pos={'required'} /> : null
+                          }
+                        </span>
+                      )
+                    }
                   </div>
-                }
-                <div className={`td payload name depth-${item.depth} nowrap`}>
-                  {!editable
-                    ? <span className='nowrap'>{item.name}{item.scope === 'request' && item.depth === 0 ? <PropertyLabel pos={item.pos} /> : null}</span>
-                    : <input value={item.name} onChange={e => handleChangePropertyField(item.id, 'name', e.target.value)} className='form-control editable' spellCheck='false' placeholder='' />
-                  }
+                  <div className='td payload type'>
+                    {!editable
+                      ? <span className='nowrap'>{item.type}</span>
+                      : <select value={item.type} onChange={e => handleChangePropertyField(item.id, 'type', e.target.value)} className='form-control editable'>
+                        {['String', 'Number', 'Boolean', 'Object', 'Array', 'Function', 'RegExp'].map(type =>
+                          <option key={type} value={type}>{type}</option>
+                        )}
+                      </select>
+                    }
+                  </div>
+                  <div className='td payload type'>
+                    {!editable
+                      ? <span className='nowrap'>{requiredType === 1 ? '必选' : '非必选'}</span>
+                      : <select value={requiredType} onChange={e => handleChangePropertyField(item.id, 'requiredType', parseInt(e.target.value, 10))} className='form-control editable'>
+                        <option key={'0'} value={0}>{'非必选'}</option>
+                        <option key={'1'} value={1}>{'必选'}</option>
+                      </select>
+                    }
+                  </div>
+                  <div className='td payload rule nowrap'>
+                    {!editable
+                      ? <span className='nowrap'>{item.rule}</span>
+                      : <input value={item.rule || ''} onChange={e => handleChangePropertyField(item.id, 'rule', e.target.value)} className='form-control editable' spellCheck='false' placeholder='' />
+                    }
+                  </div>
+                  <div className='td payload value'>
+                    {!editable
+                      ? <span>{item.value}</span>
+                      : <SmartTextarea value={item.value || ''} onChange={e => handleChangePropertyField(item.id, 'value', e.target.value)} rows='1' className='form-control editable' spellCheck='false' placeholder='' />
+                    }
+                  </div>
+                  <div className='td payload desc'>
+                    {!editable
+                      ? <span>{item.description}</span>
+                      : <SmartTextarea value={item.description || ''} onChange={e => handleChangePropertyField(item.id, 'description', e.target.value)} rows='1' className='form-control editable' spellCheck='false' placeholder='' />
+                    }
+                  </div>
                 </div>
-                <div className='td payload type'>
-                  {!editable
-                    ? <span className='nowrap'>{item.type}</span>
-                    : <select value={item.type} onChange={e => handleChangePropertyField(item.id, 'type', e.target.value)} className='form-control editable'>
-                      {['String', 'Number', 'Boolean', 'Object', 'Array', 'Function', 'RegExp'].map(type =>
-                        <option key={type} value={type}>{type}</option>
-                      )}
-                    </select>
-                  }
-                </div>
-                <div className='td payload rule nowrap'>
-                  {!editable
-                    ? <span className='nowrap'>{item.rule}</span>
-                    : <input value={item.rule || ''} onChange={e => handleChangePropertyField(item.id, 'rule', e.target.value)} className='form-control editable' spellCheck='false' placeholder='' />
-                  }
-                </div>
-                <div className='td payload value'>
-                  {!editable
-                    ? <span>{item.value}</span>
-                    : <SmartTextarea value={item.value || ''} onChange={e => handleChangePropertyField(item.id, 'value', e.target.value)} rows='1' className='form-control editable' spellCheck='false' placeholder='' />
-                  }
-                </div>
-                <div className='td payload desc'>
-                  {!editable
-                    ? <span>{item.description}</span>
-                    : <SmartTextarea value={item.description || ''} onChange={e => handleChangePropertyField(item.id, 'description', e.target.value)} rows='1' className='form-control editable' spellCheck='false' placeholder='' />
-                  }
-                </div>
+                {item.children && item.children.length ? <SortableTreeTableRow {...this.props} property={item} /> : null }
               </div>
-              {item.children && item.children.length ? <SortableTreeTableRow {...this.props} property={item} /> : null }
-            </div>
-          )}
+            )
+          })}
         </div>
       </RSortable>
     )
